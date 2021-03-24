@@ -11,7 +11,7 @@ parameters:
   values:
   - ubuntu-latest
   - ubuntu-20.04
-  
+
 # I'd like to run this manually
 trigger: none
 
@@ -21,16 +21,4 @@ jobs:
   pool: 
     vmImage: ${{ parameters.image }}
   steps:
-  - script: sed -i "s|__REPLACEKEY__|$TAILSCALEKEY|g; s|__REPLACEROUTES__|$ROUTES|g" artifacts/cloud-init.txt
-  env:
-    # The secret token needs explicit mapping. The others, not, but I am mapping them anyways so it's clear. 
-    TOKEN: $(TOKEN)
-    ROUTES: ${env:ROUTES}
-    $TAILSCALEKEY: ${env:TAILSCALEKEY}
-    AZ_CONNECTION: $(AZ_CONNECTION)
-  - task: AzurePowerShell@4
-  inputs:
-    azureSubscription: $(AZ_CONNECTION)
-    ScriptPath: 'Deploy-AzTemplate.ps1'
-    ScriptArguments: -ResourceGroupLocation 'eastus' -ArtifactStagingDirectory 'artifacts' -ResourceGroupName $(RESOURCEGROUP) -DeploymentName $(Build.BuildNumber)
-    azurePowerShellVersion: LatestVersion
+  - script: sed -i "s|__REPLACEKEY__|${{ parameters.tailscaleKey }}|g; s|__REPLACEROUTES__|${{ parameters.tailscaleRoutes }}|g" artifacts/cloud-init.txt
