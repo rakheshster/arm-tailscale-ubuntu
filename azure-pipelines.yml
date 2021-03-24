@@ -22,3 +22,6 @@ jobs:
     vmImage: ${{ parameters.image }}
   steps:
   - script: sed -i "s|__REPLACEKEY__|${{ parameters.tailscaleKey }}|g; s|__REPLACEROUTES__|${{ parameters.tailscaleRoutes }}|g" artifacts/cloud-init.txt
+    displayName: Correct cloud-init.txt
+  - script: cat artifacts/cloud-init.txt
+  
