@@ -26,7 +26,7 @@ try {
 catch { }
 
 $ErrorActionPreference = 'Stop'
-Set-StrictMode -Version 3a
+Set-StrictMode -Version 3
 
 function Format-ValidationOutput {
     param ($ValidationOutput, [int] $Depth = 0)
