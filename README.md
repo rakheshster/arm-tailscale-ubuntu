@@ -27,5 +27,6 @@ The template has a `cloud-init.txt` script that installs TailScale via cloud-ini
   4. If using Bash do: `./deploy.sh -g <resourceGroup> -d artifacts -l <location>`. 
   4. If using PowerShell do: `./Deploy-AzTemplate.ps1 -ResourceGroupName <resourceGroup> -ArtifactStagingDirectory artifacts -Location <location>`
     
+Note: 
   * If `<resourceGroup>` does not exist it will be created at `<location>`. 
   * If `<resourceGroup>` exists you can skip `-l <location>`.
