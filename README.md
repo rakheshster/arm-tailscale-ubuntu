@@ -11,7 +11,7 @@ Of course I could have gone with a VM running WireGuard in Azure, but that would
 The template takes the following parameters:
   * `virtualMachineName` - the name of the VM. This is optional and defaults to the name of the resource group. 
   * `adminKey` - an SSH key that gets added to the VM so you can SSH into it. Remember you cannot SSH via the public IP - you will have to use the TailScale IP. 
-  * `resourceTags` - tags. Optional. 
+  * `resourceTags` - tags. Optional. The template creates a user account named after the VM with `admin` suffixed to it. 
   * `addressSpace` - the address space of the vnet that's created for this VM. The subnet created in this vnet occupies the entire address space. Be sure to choose a subnet not used by any of your existing vnets as that would interfere with the peering. 
 
 The template has a `cloud-init.txt` script that installs TailScale via cloud-init. There's two things you need to fill there:
