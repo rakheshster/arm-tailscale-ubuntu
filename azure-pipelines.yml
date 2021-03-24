@@ -1,17 +1,34 @@
-pool:
-  vmImage: 'ubuntu-latest'
-
+parameters:
+- name: tailscaleKey
+  displayName: TailScale Pre-auth Key
+  type: string
+- name: tailscaleRoutes
+  displayName: Subnet routes for this node
+- name: image
+  displayName: Pool Image
+  type: string
+  default: ubuntu-latest
+  values:
+  - ubuntu-latest
+  - ubuntu-20.04
+  
 # I'd like to run this manually
 trigger: none
 
-steps:
-- script: sed -i "s|__REPLACEKEY__|$TAILSCALEKEY|g; s|__REPLACEROUTES__|$ROUTES|g" artifacts/cloud-init.txt
+jobs:
+- job: deploy
+  displayName: Deploy to Azure
+  pool: 
+    vmImage: ${{ parameters.image }}
+  steps:
+  - script: sed -i "s|__REPLACEKEY__|$TAILSCALEKEY|g; s|__REPLACEROUTES__|$ROUTES|g" artifacts/cloud-init.txt
   env:
     # The secret token needs explicit mapping. The others, not, but I am mapping them anyways so it's clear. 
     TOKEN: $(TOKEN)
-    ROUTES: $(ROUTES)
+    ROUTES: ${env:ROUTES}
+    $TAILSCALEKEY: ${env:TAILSCALEKEY}
     AZ_CONNECTION: $(AZ_CONNECTION)
-- task: AzurePowerShell@4
+  - task: AzurePowerShell@4
   inputs:
     azureSubscription: $(AZ_CONNECTION)
     ScriptPath: 'Deploy-AzTemplate.ps1'
