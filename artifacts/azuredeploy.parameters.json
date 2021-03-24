@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminKey": {
+	        "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCvd7m/4NgGLkAV6GUUTsl6Tfx0NwGDDWK4JM0eiXX5yOvJ63tVbyeMO6I7LZTjSVo2Ah9LpIOmixQSLbdOd6fIwj6s4tmHu9X9R3KvJ1JE4VApbFprOAaBFTo1lESoZ9ch3X2UaCYMl/sGO7ky22fusho7UUZn+cWlX34y+fhtggeJVrG8SzftyuqgRT27GTEE6oyYJZXsPTVah74yEPWHBMt4n5qcnTkfIkCSy3eqyYNypesRR4ArYv3lyiHAL9NGNDr1iXpl4/RiEy9vTQepXN0UUOmfIKo1nj5p4E2f+CHf2eYmMUqDB0xJInK0cTUml9m2X/VTq6aTnVF2VOXLGkluvLUqdLkcLHfYC+xHF47tKlvuWKiQwzvDViUoNlIW5ai8cIt7Pk9HUWHZ5+Xf+sk+VnZfELYnnAc2xMFJxFFqssVINW2tm0eQIeV9iWrymlHNWj0h23eb0oTM2uJ8s/+tg4MtQcAbOPePj2bfats8fa27TXdGup/zZXlJvac= rakhesh"
+        },
+        "resourceTags": {
+            "value": {
+                "env": "common"
+            }
+        },
+        "addressSpace": {
+            "value": "192.168.64.0/24"
+        }
+    }
+}

@@ -1,0 +1,44 @@
+#cloud-config:
+package_update: true
+package_upgrade: true
+
+# ============================================================================ # 
+# this one does not work on debian because the image does not have gnupg and I # 
+# cannot install gnupg before adding the tailscale repo and its key below.     #
+# it does work in ubuntu. debian and cloud-init seems to be broken in general  # 
+# as it gives errors even installing stuff via packages.                       #
+# ============================================================================ #
+
+apt:
+  preserve_sources_list: true
+  sources:
+    tailscale.list:
+      source: "deb https://pkgs.tailscale.com/stable/ubuntu focal main"
+      keyid: 2596A99EAAB33821893C0A79458CA832957F5868
+
+packages: 
+  - tailscale
+
+write_files:
+  - content: |
+      #!/bin/bash
+      # auto update
+      apt-get update
+      apt-get upgrade -y
+      apt-get autoclean
+    path: /etc/cron.weekly/autoupdate.sh
+    permissions: '0755'
+
+runcmd:
+  # enable ip forwarding
+  - echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.conf
+  - echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.conf
+  - sysctl -p /etc/sysctl.conf
+  # - tailscale up --authkey __REPLACEKEY__  --advertise-routes=__REPLACEROUTES__
+  - tailscale up --authkey tskey-0493104e715f6dee6f48926b --advertise-routes=192.168.64.0/24,10.64.0.0/16
+
+  # install tailscale (these are the official steps which I have replaced with the cloud-init alternatives)
+  # - curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.gpg | apt-key add -
+  # - curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.list | tee /etc/apt/sources.list.d/tailscale.list
+  # - apt-get -y update
+  # - apt-get -y install tailscale

@@ -1,0 +1,23 @@
+# pool:
+#   name: Hosted Windows 2019 with VS2019
+#   demands: azureps
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+# I'd like to run this manually
+trigger: none
+
+steps:
+- script: sed -i "s|__REPLACEKEY__|$TAILSCALEKEY|g; s|__REPLACEROUTES__|$REPO|g" artifacts/cloud-init.txt
+  env:
+    # The secret token needs explicit mapping. The others, not, but I am mapping them anyways so it's clear. 
+    TOKEN: $(TOKEN)
+    ROUTES: $(ROUTES)
+    AZ_CONNECTION: $(AZ_CONNECTION)
+- task: AzurePowerShell@4
+  inputs:
+    azureSubscription: $(AZ_CONNECTION)
+    ScriptPath: 'Deploy-AzTemplate.ps1'
+    ScriptArguments: -ResourceGroupLocation 'eastus' -ArtifactStagingDirectory 'artifacts' -ResourceGroupName $(RESOURCEGROUP) -DeploymentName $(Build.BuildNumber)
+    azurePowerShellVersion: LatestVersion
