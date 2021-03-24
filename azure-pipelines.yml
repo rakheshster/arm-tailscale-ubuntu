@@ -2,8 +2,10 @@ parameters:
 - name: tailscaleKey
   displayName: TailScale Pre-auth Key
   type: string
+  default: tskey-123replaceme321
 - name: tailscaleRoutes
   displayName: Subnet routes for this node
+  default: 192.168.64.0/24,10.64.0.0/16
 - name: image
   displayName: Pool Image
   type: string
