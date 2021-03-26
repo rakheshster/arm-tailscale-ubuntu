@@ -1,8 +1,8 @@
 parameters:
-- rgName: rgName
+- name: rgName
   displayName: Azure Resource group name (also used as the VM name). Will be created if it doesn't exist.
   type: string
-- location: azlocation
+- name: azlocation
   displayName: Location of the resource group. Ignored if resource group already exists.
   type: string
   default: uksouth
