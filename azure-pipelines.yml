@@ -30,9 +30,6 @@ parameters:
 # I'd like to run this manually
 trigger: none
 
-variables:
-  TERM: xterm-256color
-
 jobs:
 - job: deploy
   displayName: Deploy to Azure
@@ -56,6 +53,8 @@ jobs:
     condition: eq('${{ parameters.debug }}', true)
   - task: AzureCLI@2
     displayName: Deploy to Azure
+    env: 
+      TERM: xterm265-color
     inputs:
       azureSubscription: ${{ parameters.azSubscription }}
       scriptType: bash
