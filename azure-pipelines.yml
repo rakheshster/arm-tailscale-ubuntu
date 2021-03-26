@@ -21,6 +21,9 @@ parameters:
   displayName: Address space (also used as subnet) of the TailScale VM vnet
   type: string
   default: 192.168.64.0/24
+- name: debug
+  displayName: If true show the files I am modifying
+  default: false
 
 # I'd like to run this manually
 trigger: none
@@ -34,11 +37,15 @@ jobs:
   - script: sed -i "s|__REPLACEKEY__|${{ parameters.tailscaleKey }}|g; s|__REPLACEROUTES__|${{ parameters.tailscaleRoutes }}|g" artifacts/cloud-init.txt
     displayName: Update cloud-init.txt with the input paramters
   - script: cat artifacts/cloud-init.txt
-    displayName: Show the updated cloud-init.txt file
+    displayName: Show contents of the updated cloud-init.txt file
+    condition: condition: eq('${{ variables.debug }}', true)
   - pwsh: 
       $file = Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw | ConvertFrom-Json ;
       $file.parameters.adminKey.value = "${{ parameters.adminKey }}" ;
       $file.parameters.addressSpace.value = "${{ parameters.addressSpace }}" ;
       $file | ConvertTo-Json -Depth 15 | Set-Content ./artifacts/azuredeploy.parameters.json ;
+    displayName: Update azuredeploy.parameters.json with the input parameters
+  - pwsh: 
       Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw
-    displayName: Update ARM template parameters file
+    displayName: Show contents of the updated azuredeploy.parameters.json
+    condition: condition: eq('${{ variables.debug }}', true)
