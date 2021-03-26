@@ -32,6 +32,11 @@ jobs:
     vmImage: ${{ parameters.image }}
   steps:
   - script: sed -i "s|__REPLACEKEY__|${{ parameters.tailscaleKey }}|g; s|__REPLACEROUTES__|${{ parameters.tailscaleRoutes }}|g" artifacts/cloud-init.txt
-    displayName: Correct cloud-init.txt
+    displayName: Update cloud-init.txt with the input paramters
   - script: cat artifacts/cloud-init.txt
-  
+    displayName: Show the updated cloud-init.txt file
+  - pwsh: 
+    displayName: Update ARM template parameters file
+    env: 
+      $adminKey: $(adminKey)
+      $addrSpace: $(addrSpace)
