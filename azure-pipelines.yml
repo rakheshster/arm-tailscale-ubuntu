@@ -58,6 +58,6 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az login
+        az account show
   - script: TERM=xterm-256color ./deploy.sh -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
     displayName: Deploy to Azure
