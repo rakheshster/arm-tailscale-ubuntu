@@ -35,9 +35,10 @@ jobs:
     displayName: Update cloud-init.txt with the input paramters
   - script: cat artifacts/cloud-init.txt
     displayName: Show the updated cloud-init.txt file
-  - pwsh: Write-Host "You entered $adminKey"
-    targetType: inline
+  - pwsh: 
+      $file = Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw | ConvertFrom-Json
+      $file.parameters.adminKey.value = ${{ parameters.adminKey }}
+      $file.parameters.addressSpace.value = ${{ parameters.addressSpace }}
+      $file | ConvertTo-Json -Depth 15 | Set-Content ./artifacts/azuredeploy.parameters.json
+      Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw
     displayName: Update ARM template parameters file
-    env: 
-      $adminKey: $(adminKey)
-      $addrSpace: $(addrSpace)
