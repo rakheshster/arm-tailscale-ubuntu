@@ -30,6 +30,9 @@ parameters:
 # I'd like to run this manually
 trigger: none
 
+variables:
+  TERM: xterm-256color
+
 jobs:
 - job: deploy
   displayName: Deploy to Azure
@@ -52,13 +55,11 @@ jobs:
     displayName: Show contents of the updated azuredeploy.parameters.json
     condition: eq('${{ parameters.debug }}', true)
   - task: AzureCLI@2
-    displayName: Login to Azure
+    displayName: Deploy to Azure
     inputs:
       azureSubscription: ${{ parameters.azSubscription }}
       scriptType: bash
-      scriptLocation: inlineScript
-      inlineScript: |
-        az account show
-        az account list-locations
-  - script: TERM=xterm-256color ./deploy.sh -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
-    displayName: Deploy to Azure
+      scriptLocation: scriptPath
+      scriptPath: ./deploy.sh
+      arguments: 
+        -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
