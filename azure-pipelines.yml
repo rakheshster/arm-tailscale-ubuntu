@@ -38,7 +38,7 @@ jobs:
     displayName: Update cloud-init.txt with the input paramters
   - script: cat artifacts/cloud-init.txt
     displayName: Show contents of the updated cloud-init.txt file
-    condition: condition: eq('${{ variables.debug }}', true)
+    condition: eq('${{ parameters.debug }}', true)
   - pwsh: 
       $file = Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw | ConvertFrom-Json ;
       $file.parameters.adminKey.value = "${{ parameters.adminKey }}" ;
@@ -48,4 +48,4 @@ jobs:
   - pwsh: 
       Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw
     displayName: Show contents of the updated azuredeploy.parameters.json
-    condition: condition: eq('${{ variables.debug }}', true)
+    condition: eq('${{ parameters.debug }}', true)
