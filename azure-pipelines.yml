@@ -1,4 +1,7 @@
 parameters:
+- name: azSubscription
+  displayName: Name of the Azure ARM service connection
+  default: Free Trial 1(353da4ec-feae-427e-adc6-77b0bbf21bfc)
 - name: rgName
   displayName: Azure Resource group name (also used as the VM name). Will be created if it doesn't exist.
   type: string
@@ -23,13 +26,6 @@ parameters:
 - name: debug
   displayName: Show contents of the files after updating?
   default: false
-- name: image
-  displayName: Pool Image
-  type: string
-  default: ubuntu-latest
-  values:
-  - ubuntu-latest
-  - ubuntu-20.04
 
 # I'd like to run this manually
 trigger: none
@@ -38,7 +34,7 @@ jobs:
 - job: deploy
   displayName: Deploy to Azure
   pool: 
-    vmImage: ${{ parameters.image }}
+    vmImage: ubuntu-latest
   steps:
   - script: sed -i "s|__REPLACEKEY__|${{ parameters.tailscaleKey }}|g; s|__REPLACEROUTES__|${{ parameters.tailscaleRoutes }}|g" artifacts/cloud-init.txt
     displayName: Update cloud-init.txt with the input paramters
@@ -55,4 +51,13 @@ jobs:
       Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw
     displayName: Show contents of the updated azuredeploy.parameters.json
     condition: eq('${{ parameters.debug }}', true)
+  - task: AzureCLI@2
+    displayName: Login to Azure
+    inputs:
+      azureSubscription: ${{ parameters.azSubscription }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az login
   - script: TERM=xterm-256color ./deploy.sh -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
+    displayName: Deploy to Azure
