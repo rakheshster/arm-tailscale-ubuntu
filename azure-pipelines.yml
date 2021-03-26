@@ -1,7 +1,7 @@
 parameters:
 - name: azSubscription
   displayName: Name of the Azure ARM service connection
-  default: Free Trial 1(353da4ec-feae-427e-adc6-77b0bbf21bfc)
+  default: Free Trial 1
 - name: rgName
   displayName: Azure Resource group name (also used as the VM name). Will be created if it doesn't exist.
   type: string
