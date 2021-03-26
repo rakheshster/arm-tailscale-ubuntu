@@ -1,11 +1,29 @@
 parameters:
+- rgName: rgName
+  displayName: Azure Resource group name (also used as the VM name). Will be created if it doesn't exist.
+  type: string
+- location: azlocation
+  displayName: Location of the resource group. Ignored if resource group already exists.
+  type: string
+  default: uksouth
+- name: addressSpace
+  displayName: Address space (also used as subnet) of the TailScale VM vnet
+  type: string
+  default: 192.168.64.0/24
+- name: adminKey
+  displayName: SSH Key for admin user
+  type: string
+  default: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCvd7m/4NgGLkAV6GUUTsl6Tfx0NwGDDWK4JM0eiXX5yOvJ63tVbyeMO6I7LZTjSVo2Ah9LpIOmixQSLbdOd6fIwj6s4tmHu9X9R3KvJ1JE4VApbFprOAaBFTo1lESoZ9ch3X2UaCYMl/sGO7ky22fusho7UUZn+cWlX34y+fhtggeJVrG8SzftyuqgRT27GTEE6oyYJZXsPTVah74yEPWHBMt4n5qcnTkfIkCSy3eqyYNypesRR4ArYv3lyiHAL9NGNDr1iXpl4/RiEy9vTQepXN0UUOmfIKo1nj5p4E2f+CHf2eYmMUqDB0xJInK0cTUml9m2X/VTq6aTnVF2VOXLGkluvLUqdLkcLHfYC+xHF47tKlvuWKiQwzvDViUoNlIW5ai8cIt7Pk9HUWHZ5+Xf+sk+VnZfELYnnAc2xMFJxFFqssVINW2tm0eQIeV9iWrymlHNWj0h23eb0oTM2uJ8s/+tg4MtQcAbOPePj2bfats8fa27TXdGup/zZXlJvac= rakhesh
 - name: tailscaleKey
   displayName: TailScale Pre-auth Key
   type: string
   default: tskey-123replaceme321
 - name: tailscaleRoutes
-  displayName: Subnet routes for this node
+  displayName: Subnets routed through this TailScale node
   default: 192.168.64.0/24,10.64.0.0/16
+- name: debug
+  displayName: Show contents of the files after updating?
+  default: false
 - name: image
   displayName: Pool Image
   type: string
@@ -13,17 +31,6 @@ parameters:
   values:
   - ubuntu-latest
   - ubuntu-20.04
-- name: adminKey
-  displayName: SSH Key for admin user
-  type: string
-  default: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCvd7m/4NgGLkAV6GUUTsl6Tfx0NwGDDWK4JM0eiXX5yOvJ63tVbyeMO6I7LZTjSVo2Ah9LpIOmixQSLbdOd6fIwj6s4tmHu9X9R3KvJ1JE4VApbFprOAaBFTo1lESoZ9ch3X2UaCYMl/sGO7ky22fusho7UUZn+cWlX34y+fhtggeJVrG8SzftyuqgRT27GTEE6oyYJZXsPTVah74yEPWHBMt4n5qcnTkfIkCSy3eqyYNypesRR4ArYv3lyiHAL9NGNDr1iXpl4/RiEy9vTQepXN0UUOmfIKo1nj5p4E2f+CHf2eYmMUqDB0xJInK0cTUml9m2X/VTq6aTnVF2VOXLGkluvLUqdLkcLHfYC+xHF47tKlvuWKiQwzvDViUoNlIW5ai8cIt7Pk9HUWHZ5+Xf+sk+VnZfELYnnAc2xMFJxFFqssVINW2tm0eQIeV9iWrymlHNWj0h23eb0oTM2uJ8s/+tg4MtQcAbOPePj2bfats8fa27TXdGup/zZXlJvac= rakhesh
-- name: addressSpace
-  displayName: Address space (also used as subnet) of the TailScale VM vnet
-  type: string
-  default: 192.168.64.0/24
-- name: debug
-  displayName: If true show the files I am modifying
-  default: false
 
 # I'd like to run this manually
 trigger: none
@@ -49,3 +56,4 @@ jobs:
       Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw
     displayName: Show contents of the updated azuredeploy.parameters.json
     condition: eq('${{ parameters.debug }}', true)
+  - script: ./deploy.sh -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
