@@ -35,7 +35,7 @@ jobs:
     displayName: Update cloud-init.txt with the input paramters
   - script: cat artifacts/cloud-init.txt
     displayName: Show the updated cloud-init.txt file
-  - pwsh: 
+  - pwsh: Write-Host "You entered $adminKey"
     displayName: Update ARM template parameters file
     env: 
       $adminKey: $(adminKey)
