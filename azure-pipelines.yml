@@ -17,7 +17,6 @@ parameters:
 - name: tailscaleKey
   displayName: TailScale Pre-auth Key
   type: string
-  default: tskey-123replaceme321
 - name: tailscaleRoutes
   displayName: Subnets routed through this TailScale node
   default: 192.168.64.0/24,10.64.0.0/16
@@ -56,4 +55,4 @@ jobs:
       Get-Content -Path ./artifacts/azuredeploy.parameters.json -Raw
     displayName: Show contents of the updated azuredeploy.parameters.json
     condition: eq('${{ parameters.debug }}', true)
-  - script: ./deploy.sh -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
+  - script: TERM=xterm-256color ./deploy.sh -g ${{ parameters.rgName }} -d artifacts -l ${{ parameters.azlocation }}
