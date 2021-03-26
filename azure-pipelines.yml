@@ -54,7 +54,7 @@ jobs:
   - task: AzureCLI@2
     displayName: Deploy to Azure
     env: 
-      TERM: xterm265-color
+      TERM: xterm256-color
     inputs:
       azureSubscription: ${{ parameters.azSubscription }}
       scriptType: bash
