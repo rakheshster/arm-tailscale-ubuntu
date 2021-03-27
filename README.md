@@ -34,6 +34,6 @@ Note:
 
 ## Using Azure DevOps Pipelines
 
-  1. Clone this repo.
+  1. Fork this repo in GitHub.
   2. Create an Azure DevOps pipeline that points to the repo.
   3. Run the pipeline. Fill in the pre-authentication key, SSH key, subnets etc. when prompted. 
