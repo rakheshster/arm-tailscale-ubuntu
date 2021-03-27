@@ -31,3 +31,9 @@ Note:
   * PowerShell Core is sufficient so you can run this from macOS, Linux etc. 
   * If `<resourceGroup>` does not exist it will be created at `<location>`. 
   * If `<resourceGroup>` exists you can skip `-l <location>`.
+
+## Using Azure DevOps Pipelines
+
+  1. Clone this repo.
+  2. Create an Azure DevOps pipeline that points to the repo.
+  3. Run the pipeline. Fill in the pre-authentication key, SSH key, subnets etc. when prompted. 
