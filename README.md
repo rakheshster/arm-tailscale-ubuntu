@@ -22,7 +22,7 @@ The template has a `cloud-init.txt` script that installs TailScale via cloud-ini
 ## Using Bash or PowerShell
 
   1. Clone this repo. 
-  2. Edit `artifacts/cloud-init.txt` with the required info.
+  2. Edit `artifacts/cloud-init.txt` and the parameters file in `artifacts/` with the required info.
   3. Login to Azure
   4. If using **Bash** do: `./deploy.sh -g <resourceGroup> -d artifacts -l <location>`. 
   4. If using **PowerShell** do: `./Deploy-AzTemplate.ps1 -ResourceGroupName <resourceGroup> -ArtifactStagingDirectory artifacts -Location <location>`
