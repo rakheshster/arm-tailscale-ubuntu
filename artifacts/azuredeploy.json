@@ -62,7 +62,6 @@
         "keyvaultName": "[concat(parameters('virtualMachineName'), substring(uniqueString(resourceGroup().id), 0, 3), '-keyvault')]",
         "keyVaultSku": "Standard",
         "keyName": "diskencryptionec",
-        "diskencsetName": "[concat(parameters('virtualMachineName'), '-diskencset')]",
         // hat tip: https://www.wintellect.com/arm-templates-and-cloud-init/
         "customData": "[concat('#include\n', uri(parameters('_artifactsLocation'), concat('cloud-init.txt', parameters('_artifactsLocationSasToken'))))]"
     },
@@ -111,7 +110,7 @@
         {
             "type": "Microsoft.Compute/diskEncryptionSets",
             "apiVersion": "2019-07-01",
-            "name": "[variables('diskencsetName')]",
+            "name": "[variables('diskEncryptionSetName')]",
             "location": "[variables('location')]",
             "tags": "[parameters('resourceTags')]",
             "dependsOn": [
@@ -134,13 +133,13 @@
             "apiVersion": "2019-09-01",
             "name": "[concat(variables('keyvaultName'), '/add')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/diskEncryptionSets', variables('diskencsetName'))]"
+                "[resourceId('Microsoft.Compute/diskEncryptionSets', variables('diskEncryptionSetName'))]"
             ],
             "properties": {
                 "accessPolicies": [
                     {
                         "tenantId": "[subscription().tenantId]",
-                        "objectId": "[reference(resourceId('Microsoft.Compute/diskEncryptionSets', variables('diskencsetName')), '2019-07-01', 'Full').identity.PrincipalId]",
+                        "objectId": "[reference(resourceId('Microsoft.Compute/diskEncryptionSets', variables('diskEncryptionSetName')), '2019-07-01', 'Full').identity.PrincipalId]",
                         "permissions": {
                             "keys": [
                                 "Get",
@@ -277,7 +276,7 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]",
-                "[resourceId('Microsoft.Compute/diskEncryptionSets', variables('diskencsetName'))]"
+                "[resourceId('Microsoft.Compute/diskEncryptionSets', variables('diskEncryptionSetName'))]"
             ],
             "tags": "[parameters('resourceTags')]",
             "zones": [
