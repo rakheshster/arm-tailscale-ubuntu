@@ -59,7 +59,7 @@
         "zone": "1",
         "dnsLabelPrefix": "[concat(parameters('virtualMachineName'), '' )]",
         "osDiskName": "[concat(parameters('virtualMachineName'), '-osDisk')]",
-        "keyvaultName": "[concat(parameters('virtualMachineName'), substring(uniqueString(resourceGroup().id), 0, 3), '-keyvault')]",
+        "keyvaultName": "[concat(substring(parameters('virtualMachineName'), 0, 12), substring(uniqueString(resourceGroup().id), 0, 3), '-keyvault')]",
         "keyVaultSku": "Standard",
         "keyName": "diskencryptionec",
         // hat tip: https://www.wintellect.com/arm-templates-and-cloud-init/
